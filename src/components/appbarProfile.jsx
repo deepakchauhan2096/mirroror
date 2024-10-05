@@ -43,7 +43,6 @@ export default function AppBarProfile() {
   const [open, setOpen] = React.useState(false);
   const [openCreate, setOpenCreate] = React.useState(false);
 
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -52,7 +51,6 @@ export default function AppBarProfile() {
     setOpen(false);
   };
 
-  
   const handleCreateOpen = () => {
     setOpenCreate(true);
   };
@@ -60,8 +58,6 @@ export default function AppBarProfile() {
   const handleCreateClose = () => {
     setOpenCreate(false);
   };
-
-
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -178,6 +174,7 @@ export default function AppBarProfile() {
                 aria-controls={mobileMenuId}
                 aria-haspopup="true"
                 color="inherit"
+                onClick={handleCreateOpen}
               >
                 <AddBoxOutlinedIcon />
               </IconButton>

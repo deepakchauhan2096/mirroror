@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BottomNav from "./components/bottomNav";
 import Home from "./pages/home";
 import Profile from "./pages/profiles";
+import Weboff from "./components/weboff";
 
 
 function App() {
@@ -20,13 +21,19 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <Router>
-        <div style={{ height: "100vh" }}>
+        <div style={{ height: "100vh" }} className="mobile-only">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             {/* Add more routes as needed */}
           </Routes>
           <BottomNav />
+        </div>
+        <div className="desktop-only">
+         <Routes>
+            <Route path="/" element={<Weboff />} />
+            <Route path="/profile" element={<Weboff />} />
+          </Routes>
         </div>
       </Router>
     </ThemeProvider>

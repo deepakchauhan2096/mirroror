@@ -4,3 +4,23 @@
   box-sizing: border-box;
 }
 
+.mobile-only {
+  display: none; /* Show specific elements only on mobile */
+}
+
+.desktop-only {
+  display: block;
+}
+
+/* CSS for mobile devices only */
+@media only screen and (max-width: 768px) {
+
+  .mobile-only {
+    display: block; 
+  }
+
+  .desktop-only {
+    display: none;
+  }
+}
+

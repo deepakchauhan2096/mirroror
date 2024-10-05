@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
+// import Drawer from "@mui/material/Drawer";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
@@ -18,6 +19,16 @@ export default function Create({ openCreate, handleCreateClose }) {
       onClick={handleCreateClose}
       onKeyDown={handleCreateClose}
     >
+      <Divider
+        sx={{
+          borderColor: "#333",
+          borderWidth: "2px",
+          width: "25%",
+          margin: "8px auto",
+          borderRadius: "10px",
+        }}
+      />
+
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
           <ListItem key={text} disablePadding>
@@ -49,9 +60,20 @@ export default function Create({ openCreate, handleCreateClose }) {
   return (
     <div>
       {/* <Button onClick={}>{"bottom"}</Button> */}
-      <Drawer anchor={"bottom"} open={openCreate} onClose={handleCreateClose}>
+      <SwipeableDrawer
+        anchor={"bottom"}
+        open={openCreate}
+        onClose={handleCreateClose}
+        sx={{
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            borderTopLeftRadius: "10px",
+            borderTopRightRadius: "10px",
+          },
+        }}
+      >
         {list("bottom")}
-      </Drawer>
+      </SwipeableDrawer>
     </div>
   );
 }

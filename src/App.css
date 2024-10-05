@@ -12,6 +12,21 @@
   display: block;
 }
 
+/* Define slide-up (visible) and slide-down (hidden) states */
+.bottom-nav {
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.bottom-nav.show {
+  transform: translateY(0); /* Visible */
+}
+
+.bottom-nav.hide {
+  transform: translateY(100%); /* Hidden (slide down) */
+}
+
+
 /* CSS for mobile devices only */
 @media only screen and (max-width: 768px) {
 

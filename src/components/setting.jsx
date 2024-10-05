@@ -52,7 +52,7 @@ function Setting({ handleDrawerClose, open }) {
               sx={{
                 mr: 2,
                 fontFamily: "sans-serif",
-                fontSize: "14px",
+                fontSize: "large",
                 fontWeight: "600",
                 marginLeft: "20px",
                 color: "#000",

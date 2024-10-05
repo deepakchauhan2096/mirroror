@@ -10,20 +10,21 @@ const ProfileContainer = styled(Box)(() => ({
 }));
 
 const ProfileHeader = styled(Box)({
-    flexGrow: 1,
+  flexGrow: 1,
 });
 
 const ProfileInfo = styled(Box)({
   flexGrow: 1,
-  marginBottom:"10px"
+  marginBottom: "10px",
 });
 
 const StatsContainer = styled(Box)({
   display: "flex",
   justifyContent: "flex-end",
   maxWidth: "100%",
-  gap:"20px",
-  marginLeft:"50px"
+  gap: "20px",
+  marginLeft: "50px",
+  flexGrow: 0,
 });
 
 const StatsBlock = styled(Box)({
@@ -82,7 +83,7 @@ const Profile = () => {
           >
             <Avatar
               src="https://randomuser.me/api/portraits/women/45.jpg"
-              sx={{ width: 90, height: 90 }}
+              sx={{ width: 70, height: 70 }}
             />
             {/* Stats */}
             <StatsContainer>
@@ -109,10 +110,7 @@ const Profile = () => {
         </ProfileHeader>
         {/* Profile Info */}
         <ProfileInfo>
-          <Typography
-            variant="h6"
-            sx={{ marginTop: "10px", fontSize: "14px" }}
-          >
+          <Typography variant="h6" sx={{ marginTop: "10px", fontSize: "14px" }}>
             username123
           </Typography>
 
@@ -124,7 +122,6 @@ const Profile = () => {
           </Typography>
         </ProfileInfo>
 
-        {/* Add Friend Button */}
         <Box display="flex" justifyContent="space-between" mb={2}>
           {/* Edit Profile, Share Profile, and Settings */}
           <Box
@@ -136,32 +133,68 @@ const Profile = () => {
             <Button
               variant="contained"
               size="small"
-              sx={{ marginRight: "5px", boxShadow: "none" }}
               color="secondary"
+              sx={{
+                marginRight: "5px",
+                boxShadow: "none",
+                color: "secondary",
+                flexGrow: 1, // Makes the button take up available space equally
+                minWidth: "100px", // Sets a minimum width so they don't shrink too small
+                textTransform: "capitalize",
+              }}
             >
               Edit Profile
             </Button>
             <Button
               variant="contained"
               size="small"
-              sx={{ marginRight: "5px", boxShadow: "none" }}
               color="secondary"
+              sx={{
+                marginRight: "5px",
+                boxShadow: "none",
+                color: "secondary",
+                flexGrow: 1, // Ensures buttons grow equally
+                minWidth: "100px",
+                textTransform: "capitalize",
+              }}
             >
               Share Profile
             </Button>
             <Button
               variant="contained"
               size="small"
-              sx={{ boxShadow: "none" }}
               color="secondary"
+              sx={{
+                boxShadow: "none",
+                color: "secondary",
+                flexGrow: 0,
+                minWidth: "0px",
+              }}
             >
-              <PersonAddIcon />
+              <PersonAddIcon sx={{ fontSize: "22px" }} />
             </Button>
           </Box>
         </Box>
 
         {/* Highlights */}
         <HighlightContainer>
+          {/* Add Highlight Circle */}
+          <HighlightCircle>
+            <Avatar
+              sx={{
+                width: 70,
+                height: 70,
+                backgroundColor: "#f0f0f0", // Light grey background for "Add" circle
+                color: "#333", // Dark color for the "+" symbol
+                fontSize: "2rem", // Adjust font size for the "+" symbol
+              }}
+            >
+              +
+            </Avatar>
+            <Typography variant="caption">Moments</Typography>
+          </HighlightCircle>
+
+          {/* Other Highlight Circles */}
           <HighlightCircle>
             <Avatar
               src="https://randomuser.me/api/portraits/men/15.jpg"
@@ -169,6 +202,7 @@ const Profile = () => {
             />
             <Typography variant="caption">Travel</Typography>
           </HighlightCircle>
+
           <HighlightCircle>
             <Avatar
               src="https://randomuser.me/api/portraits/women/30.jpg"
@@ -176,6 +210,7 @@ const Profile = () => {
             />
             <Typography variant="caption">Workouts</Typography>
           </HighlightCircle>
+
           <HighlightCircle>
             <Avatar
               src="https://randomuser.me/api/portraits/men/22.jpg"

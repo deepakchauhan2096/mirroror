@@ -3,6 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./postCard"; // Assuming the card component is in the same directory
 
 const InfiniteScrollFeed = () => {
+
   const [posts, setPosts] = useState([
     {
       id: 1,

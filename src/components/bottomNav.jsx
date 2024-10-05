@@ -1,11 +1,11 @@
 import * as React from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import HomeIcon from "@mui/icons-material/Home";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import MovieCreationOutlinedIcon from "@mui/icons-material/MovieCreationOutlined";
 import { Paper } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 
@@ -19,7 +19,13 @@ export default function LabelBottomNavigation() {
 
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        display: location.pathname == "/add" || location.pathname == "/blinks" ? "none" : "",
+      }}
       elevation={5}
     >
       <BottomNavigation
@@ -28,37 +34,37 @@ export default function LabelBottomNavigation() {
         onChange={handleChange}
       >
         <BottomNavigationAction
-          label="Home"
+          // label="Home"
           value="/"
-          icon={<HomeIcon />}
+          icon={<HomeOutlinedIcon />}
           component={Link}
           to="/"
         />
         <BottomNavigationAction
-          label="Favorites"
+          // label="Favorites"
           value="/favorites"
-          icon={<FavoriteIcon />}
+          icon={<FavoriteBorderOutlinedIcon />}
           component={Link}
           to="/favorites"
         />
         <BottomNavigationAction
-          label="Add"
+          // label="Add"
           value="/add"
-          icon={<AddCircleIcon />}
+          icon={<AddBoxOutlinedIcon />}
           component={Link}
           to="/add"
         />
         <BottomNavigationAction
-          label="Nearby"
-          value="/nearby"
-          icon={<LocationOnIcon />}
+          // label="Nearby"
+          value="/blinks"
+          icon={<MovieCreationOutlinedIcon />}
           component={Link}
-          to="/nearby"
+          to="/blinks"
         />
         <BottomNavigationAction
-          label="Profile"
+          // label="Profile"
           value="/profile"
-          icon={<AccountCircleIcon />}
+          icon={<AccountCircleOutlinedIcon />}
           component={Link}
           to="/profile"
         />

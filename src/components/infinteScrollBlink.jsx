@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 
 const reelsData = [
   {
@@ -33,6 +35,7 @@ const InfiniteScrollBlinks = () => {
   const [reels, setReels] = useState(reelsData);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false); // Track if the video is playing
   const navigate = useNavigate();
   const reelContainerRef = useRef(null);
   const videoRefs = useRef([]);
@@ -91,7 +94,12 @@ const InfiniteScrollBlinks = () => {
     videoRefs.current.forEach((video, index) => {
       if (video) {
         if (index === currentVideoIndex) {
-          video.play();
+          if (isPlaying) {
+            video.play();
+          } else {
+            video.pause();
+          }
+
           video.onended = () => {
             // Scroll to the next video when the current video ends
             const nextIndex = (currentVideoIndex + 1) % videoRefs.current.length;
@@ -106,7 +114,11 @@ const InfiniteScrollBlinks = () => {
         }
       }
     });
-  }, [currentVideoIndex]);
+  }, [currentVideoIndex, isPlaying]);
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying); // Toggle between play and pause
+  };
 
   // Generate an infinite scroll effect by repeating the videos
   const renderReels = () => {
@@ -128,7 +140,7 @@ const InfiniteScrollBlinks = () => {
           component="video"
           src={reel.video}
           controls={false} // Disable default video controls
-          muted
+          muted={false}
           ref={(el) => (videoRefs.current[index] = el)}
           data-index={index}
           sx={{
@@ -142,6 +154,22 @@ const InfiniteScrollBlinks = () => {
             zIndex: 0, // Video behind overlays
           }}
         />
+        
+        {/* Play/Pause Button in the center */}
+        <IconButton
+          onClick={togglePlayPause}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            color: '#fff',
+            zIndex: 2, // Above video and overlays
+          }}
+        >
+          {isPlaying ? <PauseIcon sx={{ fontSize: 60 }} /> : <PlayArrowIcon sx={{ fontSize: 60 }} />}
+        </IconButton>
         
         {/* Overlay Description */}
         <Box

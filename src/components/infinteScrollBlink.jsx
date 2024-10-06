@@ -1,12 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
-import { Box, CardMedia, Typography, IconButton, Snackbar, Alert } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate } from 'react-router-dom';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
+import { useState, useRef, useEffect } from "react";
+import {
+  Box,
+  CardMedia,
+  Typography,
+  IconButton,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import Carousel from "react-elastic-carousel";
 
 const reelsData = [
   {
@@ -33,19 +41,20 @@ const reelsData = [
 
 const InfiniteScrollBlinks = () => {
   const [reels, setReels] = useState(reelsData);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(null);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false); // Track if the video is playing
-  const navigate = useNavigate();
-  const reelContainerRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [showPlayButton, setShowPlayButton] = useState(false); // State to control play button visibility
   const videoRefs = useRef([]);
+  const navigate = useNavigate();
+  const duplicatedReels = [...reels, ...reels];
+  const carouselRef = useRef(null);
 
   const handleBack = () => {
-    navigate(-1); // Go back to the previous page
+    navigate(-1);
   };
 
   const handleLike = (index) => {
-    // Update likes for the video
     const updatedReels = [...reels];
     updatedReels[index].likes += 1;
     setReels(updatedReels);
@@ -53,44 +62,26 @@ const InfiniteScrollBlinks = () => {
 
   const handleShare = async (index) => {
     const shareData = {
-      title: reels[index].description,
+      title: duplicatedReels[index].description,
       text: "Check out this awesome video!",
-      url: reels[index].video, // You can share the video link
+      url: duplicatedReels[index].video,
     };
 
     try {
       await navigator.share(shareData);
-      setSnackbarOpen(true); // Show snackbar on successful share
+      setSnackbarOpen(true);
     } catch (err) {
-      console.error('Error sharing:', err);
+      console.error("Error sharing:", err);
     }
   };
 
-  // Use Intersection Observer to detect when the video is in view
-  useEffect(() => {
-    const options = {
-      threshold: 0.5, // Trigger when 50% of the video is visible
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const index = Number(entry.target.dataset.index);
-        if (entry.isIntersecting) {
-          setCurrentVideoIndex(index); // Set the current video index when it enters view
-        }
-      });
-    }, options);
-
-    const elements = document.querySelectorAll(".reel-video");
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
+  const handleVideoEnd = () => {
+    const nextIndex = (currentVideoIndex + 1) % duplicatedReels.length;
+    setCurrentVideoIndex(nextIndex);
+    carouselRef.current.goTo(nextIndex);
+  };
 
   useEffect(() => {
-    // Play and pause videos based on the currentVideoIndex
     videoRefs.current.forEach((video, index) => {
       if (video) {
         if (index === currentVideoIndex) {
@@ -99,16 +90,7 @@ const InfiniteScrollBlinks = () => {
           } else {
             video.pause();
           }
-
-          video.onended = () => {
-            // Scroll to the next video when the current video ends
-            const nextIndex = (currentVideoIndex + 1) % videoRefs.current.length;
-            setCurrentVideoIndex(nextIndex);
-            reelContainerRef.current.scrollTo({
-              top: reelContainerRef.current.clientHeight * nextIndex,
-              behavior: 'smooth', // Smooth scroll to next video
-            });
-          };
+          video.onended = handleVideoEnd;
         } else {
           video.pause();
         }
@@ -117,13 +99,18 @@ const InfiniteScrollBlinks = () => {
   }, [currentVideoIndex, isPlaying]);
 
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying); // Toggle between play and pause
+    setIsPlaying(!isPlaying);
   };
 
-  // Generate an infinite scroll effect by repeating the videos
+  useEffect(() => {
+    const firstVideo = videoRefs.current[currentVideoIndex];
+    if (firstVideo) {
+      firstVideo.play();
+    }
+  }, []);
+
   const renderReels = () => {
-    const repeatedReels = [...reels, ...reels, ...reels]; // Repeat the original reels data
-    return repeatedReels.map((reel, index) => (
+    return duplicatedReels.map((reel, index) => (
       <Box
         key={index}
         sx={{
@@ -132,17 +119,16 @@ const InfiniteScrollBlinks = () => {
           justifyContent: "center",
           alignItems: "center",
           position: "relative",
-          scrollSnapAlign: "start", // Ensure snapping effect when scrolling
+          scrollSnapAlign: "start",
         }}
       >
         <CardMedia
           className="reel-video"
           component="video"
           src={reel.video}
-          controls={false} // Disable default video controls
+          controls={false}
           muted={false}
           ref={(el) => (videoRefs.current[index] = el)}
-          data-index={index}
           sx={{
             width: "100%",
             height: "100%",
@@ -151,26 +137,32 @@ const InfiniteScrollBlinks = () => {
             position: "sticky",
             top: 0,
             left: 0,
-            zIndex: 0, // Video behind overlays
+            zIndex: 0,
           }}
         />
-        
-        {/* Play/Pause Button in the center */}
+
+        {/* Play/Pause Button */}
         <IconButton
           onClick={togglePlayPause}
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            color: '#fff',
-            zIndex: 2, // Above video and overlays
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            color: "#fff",
+            zIndex: 2,
+            transition: "opacity 0.5s ease",
+            opacity: isPlaying ? 0 : 1, // Fade out when playing
           }}
         >
-          {isPlaying ? <PauseIcon sx={{ fontSize: 60 }} /> : <PlayArrowIcon sx={{ fontSize: 60 }} />}
+          {isPlaying ? (
+            <PauseIcon sx={{ fontSize: 60 }} />
+          ) : (
+            <PlayArrowIcon sx={{ fontSize: 60 }} />
+          )}
         </IconButton>
-        
+
         {/* Overlay Description */}
         <Box
           sx={{
@@ -181,13 +173,13 @@ const InfiniteScrollBlinks = () => {
             background: "rgba(0, 0, 0, 0.5)",
             padding: "10px",
             borderRadius: "5px",
-            zIndex: 1, // Above video
-            flexFlow: 1,
-            display: "flex",
-            width: "70%"
+            zIndex: 1,
+            width: "70%",
           }}
         >
-          <Typography sx={{ fontSize: "small" }} variant="h6">{reel.description}</Typography>
+          <Typography sx={{ fontSize: "small" }} variant="h6">
+            {reel.description}
+          </Typography>
         </Box>
 
         {/* Action Icons */}
@@ -200,19 +192,21 @@ const InfiniteScrollBlinks = () => {
             display: "flex",
             flexDirection: "column",
             gap: 1,
-            zIndex: 1, // Above video
+            zIndex: 1,
           }}
         >
-          <IconButton 
-            onClick={() => handleLike(index)} 
-            sx={{ color: reel.likes > 0 ? "red" : "#fff" }} // Change color when liked
+          <IconButton
+            onClick={() => handleLike(index)}
+            sx={{ color: reel.likes > 0 ? "red" : "#fff" }}
           >
             <FavoriteIcon sx={{ color: reel.likes > 0 ? "red" : "#fff" }} />
           </IconButton>
-          <Typography variant="caption" sx={{ textAlign: "center", color: "#fff" }}>
+          <Typography
+            variant="caption"
+            sx={{ textAlign: "center", color: "#fff" }}
+          >
             {reel.likes}
-          </Typography> {/* Show likes count below the heart */}
-          
+          </Typography>
           <IconButton onClick={() => handleShare(index)} sx={{ color: "#fff" }}>
             <ShareIcon />
           </IconButton>
@@ -224,22 +218,45 @@ const InfiniteScrollBlinks = () => {
     ));
   };
 
+  // Show play button when the user taps the screen
+  const handleTouchStart = () => {
+    setShowPlayButton(true);
+  };
+
   return (
     <Box
       sx={{
         height: "100vh",
-        overflowY: "auto",
+        overflowY: "hidden",
         background: "#000",
       }}
-      ref={reelContainerRef}
+      onTouchStart={handleTouchStart} // Show button on touch
     >
       {/* Back Button */}
-      <IconButton onClick={handleBack} sx={{ color: '#fff', position: 'fixed', top: 10, left: 10, zIndex: 2 }}>
+      <IconButton
+        onClick={handleBack}
+        sx={{ color: "#fff", position: "fixed", top: 10, left: 10, zIndex: 2 }}
+      >
         <ArrowBackIcon />
-        <Typography sx={{ fontSize: "large", marginLeft: "10px" }} variant="h6">Blinks</Typography>
+        <Typography sx={{ fontSize: "large", marginLeft: "10px" }} variant="h6">
+          Blinks
+        </Typography>
       </IconButton>
 
-      {renderReels()} {/* Render the repeated reels */}
+      {/* Carousel Component */}
+      <Carousel
+        ref={carouselRef}
+        verticalMode
+        showArrows={false}
+        pagination={false}
+        itemsToShow={1}
+        onChange={(currentItem) => {
+          setCurrentVideoIndex(currentItem.index % duplicatedReels.length);
+        }}
+        className="containersss"
+      >
+        {renderReels()}
+      </Carousel>
 
       {/* Snackbar for share notification */}
       <Snackbar
@@ -247,8 +264,12 @@ const InfiniteScrollBlinks = () => {
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
       >
-        <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%' }}>
-          Link copied to clipboard!
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Video link shared successfully!
         </Alert>
       </Snackbar>
     </Box>

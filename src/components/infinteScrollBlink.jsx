@@ -129,7 +129,7 @@ const InfiniteScrollBlinks = () => {
   controls={false}
   muted={false}
   ref={(el) => (videoRefs.current[index] = el)}
-  poster="https://via.placeholder.com/600x400/000000"
+  poster="https://via.placeholder.com/600x400/000000/000000"
   sx={{
     width: "100%",
     height: "100%",

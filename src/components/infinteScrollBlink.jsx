@@ -128,6 +128,7 @@ const InfiniteScrollBlinks = () => {
           src={reel.video}
           controls={false}
           muted={false}
+          poster=""
           ref={(el) => (videoRefs.current[index] = el)}
           sx={{
             width: "100%",

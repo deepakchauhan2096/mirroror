@@ -44,7 +44,7 @@ const InfiniteScrollBlinks = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [showPlayButton, setShowPlayButton] = useState(false); // State to control play button visibility
+  const [setShowPlayButton] = useState(false); // State to control play button visibility
   const videoRefs = useRef([]);
   const navigate = useNavigate();
   const duplicatedReels = [...reels, ...reels];
@@ -138,6 +138,10 @@ const InfiniteScrollBlinks = () => {
             top: 0,
             left: 0,
             zIndex: 0,
+            backgroundColor: "black", // Add black background
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         />
 
@@ -253,7 +257,6 @@ const InfiniteScrollBlinks = () => {
         onChange={(currentItem) => {
           setCurrentVideoIndex(currentItem.index % duplicatedReels.length);
         }}
-        className="containersss"
       >
         {renderReels()}
       </Carousel>

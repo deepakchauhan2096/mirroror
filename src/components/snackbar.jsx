@@ -16,6 +16,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkIcon from "@mui/icons-material/Link";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import PropTypes from "prop-types";
 
 const users = [
   { name: "HindiWaadi", img: "" },
@@ -26,15 +27,28 @@ const users = [
   { name: "garima❤️", img: "https://example.com/garima.jpg" },
 ];
 
-const SnakeBar = ({ onShare, snackbarOpen, setSnackbarOpen}) => {
-  const [drawerOpen, setDrawerOpen] = useState(true);
-
+const SnakeBar = ({ onShare, snackbarOpen, setSnackbarOpen }) => {
   const toggleDrawer = (open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
-    setDrawerOpen(open);
-    setSnackbarOpen(open)
+    setSnackbarOpen(open);
+  };
+
+  // Function to share the link via the Web Share API
+  const handleShareViaLink = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: 'Check this out!',
+          url: window.location.href,
+        })
+        .then(() => console.log('Share successful'))
+        .catch((error) => console.error('Error sharing:', error));
+    } else {
+      // Fallback for browsers that do not support the Web Share API
+      alert("Sharing is not supported in this browser.");
+    }
   };
 
   return (
@@ -81,13 +95,13 @@ const SnakeBar = ({ onShare, snackbarOpen, setSnackbarOpen}) => {
               </ListItemIcon>
               <ListItemText primary="Copy Link" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`)}>
               <ListItemIcon>
                 <FacebookIcon />
               </ListItemIcon>
               <ListItemText primary="Share on Facebook" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={handleShareViaLink}>
               <ListItemIcon>
                 <LinkIcon />
               </ListItemIcon>
@@ -98,6 +112,13 @@ const SnakeBar = ({ onShare, snackbarOpen, setSnackbarOpen}) => {
       </SwipeableDrawer>
     </Box>
   );
+};
+
+// Prop types definition
+SnakeBar.propTypes = {
+  onShare: PropTypes.func.isRequired, // Required function for sharing action
+  snackbarOpen: PropTypes.bool.isRequired, // Required boolean to control drawer visibility
+  setSnackbarOpen: PropTypes.func.isRequired, // Required function to set drawer visibility state
 };
 
 export default SnakeBar;

@@ -4,40 +4,51 @@ import {
   CardMedia,
   Typography,
   IconButton,
-  Snackbar,
-  Alert,
+  Avatar,
+  Button,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
+import SendIcon from "@mui/icons-material/Send"; 
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import Carousel from "react-elastic-carousel";
 import SnakeBars from "./snackbar";
 
-
 const reelsData = [
   {
     video: "https://www.w3schools.com/html/mov_bbb.mp4",
-    description: "Sample Video 1",
+    description: "Sample Video 1 dskkdnfdn jkdfnknf sknf",
     likes: 0,
+    Hastags: "#fuck #best #reels",
+    userAvatar: "https://randomuser.me/api/portraits/men/1.jpg",
+    username: "john_doe",
   },
   {
     video: "https://www.w3schools.com/html/movie.mp4",
     description: "Sample Video 2",
     likes: 0,
+    Hastags: "#fuck #best #reels",
+    userAvatar: "https://randomuser.me/api/portraits/men/1.jpg",
+    username: "john_doe",
   },
   {
     video: "https://www.w3schools.com/html/mov_bbb.mp4",
     description: "Sample Video 3",
+    Hastags: "#fuck #best #reels",
     likes: 0,
+    userAvatar: "https://randomuser.me/api/portraits/men/1.jpg",
+    username: "john_doe",
   },
   {
     video: "https://www.w3schools.com/html/movie.mp4",
     description: "Sample Video 4",
+    Hastags: "#fuck #best #reels",
     likes: 0,
+    userAvatar: "https://randomuser.me/api/portraits/men/1.jpg",
+    username: "john_doe",
   },
 ];
 
@@ -51,7 +62,6 @@ const InfiniteScrollBlinks = () => {
   const navigate = useNavigate();
   const duplicatedReels = [...reels, ...reels];
   const carouselRef = useRef(null);
-  
 
   const handleBack = () => {
     navigate(-1);
@@ -179,16 +189,84 @@ const InfiniteScrollBlinks = () => {
             bottom: 20,
             left: 20,
             color: "#fff",
-            background: "rgba(0, 0, 0, 0.5)",
+            // background: "rgba(0, 0, 0, 0.5)",
             padding: "10px",
             borderRadius: "5px",
             zIndex: 1,
-            width: "70%",
+            width: "75%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
           }}
         >
-          <Typography sx={{ fontSize: "small" }} variant="h6">
-            {reel.description}
-          </Typography>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 1,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "small",
+                display: "flex",
+                justifyItems: "center",
+                alignItems: "center",
+              }}
+              variant="h6"
+            >
+              <Avatar
+                src={reel.userAvatar}
+                sx={{
+                  marginRight: "10px",
+                  width: "30px",
+                  height: "30px",
+                  border: "2px solid #000",
+                }}
+              />{" "}
+              {reel.username}
+            </Typography>
+            <Button
+              variant="outlined" // Outlined variant for a white button
+              size="small" // Small button size
+              color="inherit" // Inherit color from theme, which should be white
+              sx={{ marginTop: 1 }} // Margin for spacing
+              onClick={() => alert(`Following ${reel.username}`)} // Replace with actual follow logic
+            >
+              Follow
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              // flexGrow: 1,
+              // display: "flex",
+              // justifyContent: "space-between",
+              // gap: 1,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "small",
+                display: "inline",
+                justifyItems: "center",
+                alignItems: "center",
+              }}
+              variant="h6"
+            >
+              {reel.description}
+              &nbsp;
+              <Typography
+                sx={{
+                  fontSize: "small",
+                  color:"gray"
+                }}
+              >
+                {" "}
+                {reel.Hastags}
+              </Typography>
+            </Typography>
+          </Box>
         </Box>
 
         {/* Action Icons */}
@@ -197,7 +275,7 @@ const InfiniteScrollBlinks = () => {
             position: "absolute",
             bottom: 20,
             right: 20,
-            color: "#fff",
+            color: "#f9f9f9",
             display: "flex",
             flexDirection: "column",
             gap: 1,
@@ -217,7 +295,7 @@ const InfiniteScrollBlinks = () => {
             {reel.likes}
           </Typography>
           <IconButton onClick={() => handleShare(index)} sx={{ color: "#fff" }}>
-            <ShareIcon />
+            <SendIcon />
           </IconButton>
           <IconButton sx={{ color: "#fff" }}>
             <ChatBubbleIcon />
@@ -234,41 +312,50 @@ const InfiniteScrollBlinks = () => {
 
   return (
     <>
-    <Box
-      sx={{
-        height: "100vh",
-        overflowY: "hidden",
-        background: "#000",
-      }}
-      onTouchStart={handleTouchStart} // Show button on touch
-    >
-      {/* Back Button */}
-      <IconButton
-        onClick={handleBack}
-        sx={{ color: "#fff", position: "fixed", top: 10, left: 10, zIndex: 2 }}
-      >
-        <ArrowBackIcon />
-        <Typography sx={{ fontSize: "large", marginLeft: "10px" }} variant="h6">
-          Blinks
-        </Typography>
-      </IconButton>
-
-      {/* Carousel Component */}
-      <Carousel
-        ref={carouselRef}
-        verticalMode
-        showArrows={false}
-        pagination={false}
-        itemsToShow={1}
-        onChange={(currentItem) => {
-          setCurrentVideoIndex(currentItem.index % duplicatedReels.length);
+      <Box
+        sx={{
+          height: "100vh",
+          overflowY: "hidden",
+          background: "#000",
         }}
+        onTouchStart={handleTouchStart} // Show button on touch
       >
-        {renderReels()}
-      </Carousel>
+        {/* Back Button */}
+        <IconButton
+          onClick={handleBack}
+          sx={{
+            color: "#fff",
+            position: "fixed",
+            top: 10,
+            left: 10,
+            zIndex: 2,
+          }}
+        >
+          <ArrowBackIcon />
+          <Typography
+            sx={{ fontSize: "large", marginLeft: "10px" }}
+            variant="h6"
+          >
+            Blinks
+          </Typography>
+        </IconButton>
 
-      {/* Snackbar for share notification */}
-      {/* <Snackbar
+        {/* Carousel Component */}
+        <Carousel
+          ref={carouselRef}
+          verticalMode
+          showArrows={false}
+          pagination={false}
+          itemsToShow={1}
+          onChange={(currentItem) => {
+            setCurrentVideoIndex(currentItem.index % duplicatedReels.length);
+          }}
+        >
+          {renderReels()}
+        </Carousel>
+
+        {/* Snackbar for share notification */}
+        {/* <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
@@ -282,9 +369,13 @@ const InfiniteScrollBlinks = () => {
           Video link shared successfully!
         </Alert>
       </Snackbar> */}
-      {/* Reusable Snackbar Component */}
-      <SnakeBars onShare={() => handleShare(currentVideoIndex)} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} />
-    </Box>
+        {/* Reusable Snackbar Component */}
+        <SnakeBars
+          onShare={() => handleShare(currentVideoIndex)}
+          snackbarOpen={snackbarOpen}
+          setSnackbarOpen={setSnackbarOpen}
+        />
+      </Box>
     </>
   );
 };

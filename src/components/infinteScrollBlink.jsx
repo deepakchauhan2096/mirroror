@@ -15,6 +15,8 @@ import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import Carousel from "react-elastic-carousel";
+import SnakeBars from "./snackbar";
+
 
 const reelsData = [
   {
@@ -49,6 +51,7 @@ const InfiniteScrollBlinks = () => {
   const navigate = useNavigate();
   const duplicatedReels = [...reels, ...reels];
   const carouselRef = useRef(null);
+  
 
   const handleBack = () => {
     navigate(-1);
@@ -61,6 +64,7 @@ const InfiniteScrollBlinks = () => {
   };
 
   const handleShare = async (index) => {
+    setSnackbarOpen(true);
     const shareData = {
       title: duplicatedReels[index].description,
       text: "Check out this awesome video!",
@@ -229,6 +233,7 @@ const InfiniteScrollBlinks = () => {
   };
 
   return (
+    <>
     <Box
       sx={{
         height: "100vh",
@@ -263,7 +268,7 @@ const InfiniteScrollBlinks = () => {
       </Carousel>
 
       {/* Snackbar for share notification */}
-      <Snackbar
+      {/* <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
@@ -276,8 +281,11 @@ const InfiniteScrollBlinks = () => {
         >
           Video link shared successfully!
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
+      {/* Reusable Snackbar Component */}
+      <SnakeBars onShare={() => handleShare(currentVideoIndex)} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} />
     </Box>
+    </>
   );
 };
 

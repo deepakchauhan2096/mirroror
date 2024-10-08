@@ -123,28 +123,29 @@ const InfiniteScrollBlinks = () => {
         }}
       >
         <CardMedia
-          className="reel-video"
-          component="video"
-          src={reel.video}
-          controls={false}
-          muted={false}
-          poster=""
-          ref={(el) => (videoRefs.current[index] = el)}
-          sx={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            borderRadius: 0,
-            position: "sticky",
-            top: 0,
-            left: 0,
-            zIndex: 0,
-            backgroundColor: "black", // Add black background
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        />
+  className="reel-video"
+  component="video"
+  src={reel.video}
+  controls={false}
+  muted={false}
+  ref={(el) => (videoRefs.current[index] = el)}
+  poster="https://via.placeholder.com/600x400.png?text=Video+Thumbnail"  // Example thumbnail image
+  sx={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    borderRadius: 0,
+    position: "sticky",
+    top: 0,
+    left: 0,
+    zIndex: 0,
+    backgroundColor: "black",  // Black background
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  }}
+/>
+
 
         {/* Play/Pause Button */}
         <IconButton

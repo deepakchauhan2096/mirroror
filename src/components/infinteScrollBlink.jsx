@@ -123,29 +123,28 @@ const InfiniteScrollBlinks = () => {
         }}
       >
         <CardMedia
-  className="reel-video"
-  component="video"
-  src={reel.video}
-  controls={false}
-  muted={false}
-  ref={(el) => (videoRefs.current[index] = el)}
-  poster="https://via.placeholder.com/600x400/000000/000000"
-  sx={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    borderRadius: 0,
-    position: "sticky",
-    top: 0,
-    left: 0,
-    zIndex: 0,
-    backgroundColor: "black",  // Black background
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  }}
-/>
-
+          className="reel-video"
+          component="video"
+          src={reel.video}
+          controls={false}
+          muted={false}
+          ref={(el) => (videoRefs.current[index] = el)}
+          poster="https://via.placeholder.com/600x400/000000/000000"
+          sx={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: 0,
+            position: "sticky",
+            top: 0,
+            left: 0,
+            zIndex: 0,
+            backgroundColor: "black", // Black background
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        />
 
         {/* Play/Pause Button */}
         <IconButton
@@ -268,6 +267,7 @@ const InfiniteScrollBlinks = () => {
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }} // Center the Snackbar
       >
         <Alert
           onClose={() => setSnackbarOpen(false)}
